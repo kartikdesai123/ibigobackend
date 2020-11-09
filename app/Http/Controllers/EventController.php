@@ -107,8 +107,14 @@ class EventController extends Controller
                 ->leftjoin('business_details','business_details.user_id','=','users.id')
                 ->leftjoin('groups','groups.id','=','events.host_group')->first();
             
+                $event_invitation = EventInvite::select('user_profile','user_type','first_name','last_name','unique_id','user_slug')->where('event_id',$event_details->id)
+                ->leftjoin('users','users.id','=','event_invites.user_id')
+              //  ->leftjoin('event_invites','event_invites.user_id','=','users.id')
+                ->get();
+
             return response()->json([
-                'event_details' => $event_details,                
+                'event_details' => $event_details,
+                'event_invitation' =>  $event_invitation,               
                 'status_code' => 200,
                 'status' => true
             ]);

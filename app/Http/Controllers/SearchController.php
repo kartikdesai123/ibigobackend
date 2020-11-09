@@ -21,6 +21,7 @@ class SearchController extends Controller
 {
     public function search(Request $request)
     {
+       // print_r($request->input());exit;
     	$searchText = $request->input('searchText');
         $selected_user_type = $request->input('selected_user_type');
         $selected_duration = $request->input('selected_duration');
@@ -34,7 +35,7 @@ class SearchController extends Controller
         }
         //print_r($selected_user_type);
         $search_interest = $request->input('search_interest');
-        if ($search_interest=='' || $search_interest=='undefined' || $search_interest==null || $search_interest=='null') {
+        if ($search_interest=='' || $search_interest=='undefined' || $search_interest==null || $search_interest=='null' || $search_interest=='11') {
             $search_interest = null;
         }
         if ($searchText=='' || $searchText=='undefined' || $searchText==null || $searchText=='null' || $searchText==' ') {
@@ -174,11 +175,17 @@ class SearchController extends Controller
                         return $query->where('start_date_time','>=',$date1)->where('end_date_time','<=',$date2);
                     })->where('events.event_title', 'like', '%' . $searchText . '%')
                     ->get();
-
+//echo $searchAddress;exit;
                 $count_spots = DB::table('business_details')->select('user_id','users.user_profile','business_details.business_name','business_details.short_description','business_details.business_type','users.unique_id','users.user_slug','business_details.latitude','business_details.longitude','users.user_interests')
-                    ->join('users','users.id','=','business_details.user_id')
-                    ->where('business_details.business_name', 'like', '%' . $searchText . '%')
-                    ->when($search_interest==$i->id, function ($query) use($search_interest,$i){
+                    ->join('users','users.id','=','business_details.user_id');
+                    if($searchAddress != ""){
+                        $count_spots->where('business_details.full_address', 'like', '%' . $searchAddress . '%');
+                    }
+                    if($searchText != ""){
+                        $count_spots->where('business_details.business_name', 'like', '%' . $searchText . '%');
+                    }
+                    
+                    $count_spots->when($search_interest==$i->id, function ($query) use($search_interest,$i){
                         return $query->whereRaw('FIND_IN_SET(?,users.user_interests)', [$search_interest]);
                     })
                     ->when($search_interest!=$i->id, function ($query) use($search_interest,$i){
@@ -211,14 +218,21 @@ class SearchController extends Controller
             $count_users_array = array_unique($count_users_array);
             $count_groups_array = array_unique($count_groups_array);
             $count_events_array = array_unique($count_events_array);
-            $all_spots = DB::table('business_details')->select('user_id','users.user_profile','business_details.business_name','business_details.short_description','business_details.business_type','users.unique_id','users.user_slug','business_details.latitude','business_details.longitude','users.user_interests','business_details.full_address')
-                ->join('users','users.id','=','business_details.user_id')
-                ->where('business_details.business_name', 'like', '%' . $searchText . '%')
-                ->where('business_details.full_address', 'like', '%' . $searchAddress . '%')
-                ->when(!empty($search_interest) , function ($query) use($search_interest){
+            $all_spots1 = DB::table('business_details')->select('user_id','users.user_profile','business_details.business_name','business_details.short_description','business_details.business_type','users.unique_id','users.user_slug','business_details.latitude','business_details.longitude','users.user_interests','business_details.full_address')
+                ->join('users','users.id','=','business_details.user_id');
+            if($searchText != ""){
+                $all_spots1->where('business_details.business_name', 'like', '%' . $searchText . '%');
+            }
+            if($searchAddress != ""){
+                $all_spots1->where('business_details.full_address', 'like', '%' . $searchAddress . '%');
+            }
+                
+                $all_spots1->when(!empty($search_interest) , function ($query) use($search_interest){
                     return $query->whereRaw('FIND_IN_SET(?,users.user_interests)', [$search_interest]);
-                })->orderBy('business_type','desc')
-                ->get();
+                })->orderBy('business_type','desc');
+             //   ->get();
+       $all_spots = $all_spots1->get();
+        
             foreach ($all_spots as $key => $value) {
                 $liked_users = DB::table('spot_details')->select('user_id')
                      ->where('spot_id',$value->user_id)
