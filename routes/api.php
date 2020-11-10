@@ -181,6 +181,8 @@ Route::post('spot-suggestions','SearchController@spotSuggestions');
 
 Route::post('search','SearchController@search');
 
+Route::post('foursquare','FoursquareController@find');
+
 Route::get('/', 'ChatsController@index');
 Route::get('fetch-message/{to_user_id}', 'ChatsController@fetchMessages');
 Route::post('send-message/{to_user_id}', 'ChatsController@sendMessage');

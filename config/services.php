@@ -29,6 +29,10 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'foursquare' => [
+        'clientId' => '4JYM4HIQG0KDNLXSVMD3JAB4AW2OCUXKV3H54QUEOCJMSQ4R',
+        'clientSecret' => 'WE1IGOH20042IBONYFXWWZXIWUATMBJO0RUTOA5JW3XE43WU'
+    ],
     'facebook' => [
     'client_id' => env('FACEBOOK_CLIENT_ID'),
     'client_secret' => env('FACEBOOK_CLIENT_SECRET'),

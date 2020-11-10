@@ -13,6 +13,8 @@
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "guzzlehttp/guzzle": "^6.5",
+        "hownowstephen/php-foursquare": "1.2.*",
+        "iivannov/larasquare": "^0.1.0",
         "laravel/framework": "^7.0",
         "laravel/passport": "^8.4",
         "laravel/socialite": "^4.3",

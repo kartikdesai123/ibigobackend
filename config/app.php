@@ -175,6 +175,9 @@ return [
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        
+        //foursquare
+        Iivannov\Larasquare\Provider\LarasquareServiceProvider::class,
 
     ],
 
@@ -227,7 +230,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Socialite' => Laravel\Socialite\Facades\Socialite::class,  
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'Larasquare' => Iivannov\Larasquare\Facade\Larasquare::class
     ],
 
 ];
